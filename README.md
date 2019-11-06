@@ -1,4 +1,4 @@
-# vue-ts-template
+# vue-ts-template（群投票记得投我一票）
 
 ## Project setup
 ```
