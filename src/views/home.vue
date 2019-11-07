@@ -7,5 +7,8 @@
             &lt;MlTable /&gt; <router-link to="/table">点击查看</router-link>
             &lt;MlForm /&gt; <router-link to="/form">点击查看</router-link>
         </pre>
+        <div>
+            更新说明: MlTable标签添加url属性，配置url，直接调用内置http请求获取接口数据并渲染到页面
+        </div>
     </div>
 </template>

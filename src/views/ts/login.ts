@@ -23,12 +23,11 @@ export default class LoginComponent extends Vue{
         if(!this.form.password) return this.$message({type:'error', message: '请输入密码'})
         this.loading = true;
         
-        request.Login().subscribe(res => {
+        request.Login(this.form).subscribe(res => {
             this.setAuth(res)
             sessionStorage.setItem('login', 'true');
             sessionStorage.setItem('auth', JSON.stringify(res));
             this.$router.push('/')
-            console.log(this.$router)
         })
         
     }
