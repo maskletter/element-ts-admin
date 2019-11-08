@@ -1,7 +1,7 @@
 import Component from "vue-class-component";
 import Vue from 'vue'
 import MlTable from '@/component/table.component.vue'
-import { TableColumn } from '@/component/ts/table'
+import { TableColumn, TableFilter } from '@/component/ts/table'
 import request from '@/http'
 // import request from 'tool/request'
 // import permission from '../../permission'
@@ -17,6 +17,14 @@ export default class DemoTableComponent extends Vue{
         name: '王小虎',
         address: '上海市普陀区金沙江路 1518 弄'
     }
+
+    private tableFilters: TableFilter = [
+        { type: 'input', placeholder: '请输入', name: 'name', label: '手机号' },
+        { type: 'select', placeholder: '请选择', name: 'gender', label: '年级', data: [
+            { value: 1, label: '一年级' },
+            { value: 2, label: '二年级' }
+        ] }
+    ]
 
     private column: TableColumn = [
         { prop: 'date', title: '日期' },
@@ -42,7 +50,8 @@ export default class DemoTableComponent extends Vue{
     }
 
     private async created(){
-        this.tableData = await request.getTable(5).toPromise()
+        const result = await request.getTable(5).toPromise()
+        this.tableData = result.data
     }
 
 }   

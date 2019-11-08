@@ -12,11 +12,11 @@ export default class CommonlyComponent extends Vue {
 
         //获取用户信息
         request.getUserInfo().pipe(
-            map(v => v.id),
+            map(v => v.data.id),
             //请求获取用户朋友列表
             flatMap(v => request.getUserPeople(v)),
             //拆分返回的列表
-            mergeMap(v => v),
+            mergeMap(v => v.data),
             //摘取name参数
             map(v => v.name),
             //合并

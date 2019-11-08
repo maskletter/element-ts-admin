@@ -39,7 +39,7 @@
             <div slot="header" class="clearfix">
                 <span>直接使用内置接口请求，最简洁模式，内置分页功能 ，只需添加url属性配置,自动请求接口</span>
             </div>    
-            <MlTable :column='dynamicTable' url='/tableData'></MlTable>
+            <MlTable :column='dynamicTable' url='/tableData' :length='6' :filter='tableFilters'></MlTable>
         </el-card>
         
         

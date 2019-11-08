@@ -1,7 +1,7 @@
 import vue from 'vue'
 import { Input, Form, FormItem, Card, Button, Menu, MenuItem, Submenu, Header, Container,
     Aside, DropdownItem, DropdownMenu, Main, Dropdown, Table, TableColumn, Radio, Checkbox, Select,
-    CheckboxGroup, RadioGroup, Option, Col, Row
+    CheckboxGroup, RadioGroup, Option, Col, Row, Pagination
 } from 'element-ui'
 
 // vue.use(Element)
@@ -30,6 +30,7 @@ vue.use(Input)
     .use(Col)
     .use(Row)
     .use(RadioGroup)
+    .use(Pagination)
 // vue.component(Table.name, Table)
 // vue.component(Input.name, Input)
 // vue.component(Input.name, Input)

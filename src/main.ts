@@ -2,7 +2,6 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import '@/_element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
 import store from  './store'
 import jsoneditor from '@/component/jsoneditor.component.vue'
 

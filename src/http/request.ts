@@ -38,7 +38,8 @@ request.interceptors.response.use((response: AxiosResponse) => {
         // location.reload()
         return Promise.reject('error')
     }else{
-        return response.data.data
+        // if(response.data.data) return response.data.data
+        return response.data
     }
     
 }, (error: any) => {

@@ -24,9 +24,9 @@ export default class LoginComponent extends Vue{
         this.loading = true;
         
         request.Login(this.form).subscribe(res => {
-            this.setAuth(res)
+            this.setAuth(res.auth)
             sessionStorage.setItem('login', 'true');
-            sessionStorage.setItem('auth', JSON.stringify(res));
+            sessionStorage.setItem('auth', JSON.stringify(res.auth));
             this.$router.push('/')
         })
         
