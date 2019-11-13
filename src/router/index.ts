@@ -36,6 +36,11 @@ export default class RouterClass {
             component: () => import('@/views/rxjs/commonly.vue')
         },
         {
+            path: 'rich-text',
+            meta:{ title: '富文本', icon: 'el-icon-attract' },
+            component: () => import('@/views/rich-text.vue')
+        },
+        {
             path: 'test',
             meta:{ title: '测试路由', icon: 'el-icon-attract' },
             component: (h) => h(vue2.compile(`
@@ -65,11 +70,20 @@ export default class RouterClass {
             redirect: 'table'
         }
     ]
-    //默认无需权限页面
+    //默认无需权限的路由页面
     private static readonly defaultRouters: RouteConfig[] = [
         { 
             path: '/login',
             component: () => import("@/views/login.vue")
+        }
+    ]
+
+    //默认无需权限添加到左侧的路由页面
+    private static readonly noAuthMenuRouters: RouteConfig[] = [
+        {
+            path: '/update-log',
+            meta:{ title: '更新日志 ', icon: 'el-icon-postcard' },
+            component: () => import('@/views/update-log/index.vue')
         }
     ]
 
@@ -95,6 +109,15 @@ export default class RouterClass {
                 ]
             }
         ]
+        
+        RouterClass.noAuthMenuRouters.forEach(v => {
+            if(!v.hidden) {
+                v.path = v.path.replace(/^\//,'')
+                routes[0].children.push(v)
+            }
+        })
+        console.log(routes)
+        
         RouterClass.__router.addRoutes(routes)
         store.state.routers = routes[0].children
         return routes;

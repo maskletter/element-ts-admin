@@ -17,6 +17,7 @@ import request from './request'
  interface CommonResponseData{
      code: number
      msg: string
+     data: any
  }
 
  interface UserInfo{
@@ -57,6 +58,23 @@ import request from './request'
 
     public static getUserGrade(): Observable<CommonResponseData&{data:{id:number,name:string}}> {
         return request({method:'POST', url: '/getUserGrade'})
+    }
+
+    //首页获取echart数据1
+    public static getEchartData1(): Observable<CommonResponseData> {
+        return request({method:'POST', url: '/echart-demo1'})
+    }
+
+    //首页获取echart数据2
+    public static getEchartData2(): Observable<CommonResponseData> {
+        return request({method:'POST', url: '/echart-demo2'})
+    }
+
+    public static getCkeditorContent(): Observable<CommonResponseData> {
+        return request({method:'POST',url:'/ckeditor-content'})
+    }
+    public static getMdContent(): Observable<CommonResponseData> {
+        return request({method:'POST',url:'/md-content'})
     }
 
  }

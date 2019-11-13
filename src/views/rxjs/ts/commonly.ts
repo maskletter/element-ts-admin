@@ -18,7 +18,7 @@ export default class CommonlyComponent extends Vue {
             //拆分返回的列表
             mergeMap(v => v.data),
             //摘取name参数
-            map(v => v.name),
+            map((v: any) => v.name),
             //合并
             toArray(),
             retryWhen(errors => errors.pipe(
