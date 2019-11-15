@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="filter-table">
+        <div class="filter-table" v-if='filter && filter.length'>
             <el-row>
                 <el-col :span='4'><div style="line-height: 40px;">条件筛选</div></el-col>
                 <el-col :span='20'>
@@ -26,8 +26,9 @@
                 <el-button size='mini' @click="clearSearchFilter">情况搜索条件</el-button>
             </div>
         </div>
-        <el-table :data="tabledatas" style="width:100%">
-
+        <!-- {{$attrs}} -->
+        <el-table :data="tabledatas" style="width:100%" v-bind='$attrs' v-on="$listeners">
+            <el-table-column align="center" v-if='selection' type="selection" width="55"></el-table-column>
             <el-table-column v-for="(item,index) in column" :key='index' :prop="item.prop" :label="item.title" :align='item.align'>
                 <template slot-scope="{row, $index}">
                 <slot :$index='$index' :scope='row' :name='item.slot' v-if='isSlots(item.slot)'></slot>

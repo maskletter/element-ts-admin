@@ -1,6 +1,6 @@
 import vue from 'vue'
 import vue2 from 'vue/dist/vue.esm.js'
-import Router, { RouterOptions, RouteConfig } from 'vue-router'
+import Router, { RouterOptions, RouteConfig, Route } from 'vue-router'
 import store from '../store'
 declare const location: any;
 const originalPush = Router.prototype.push;
@@ -36,6 +36,11 @@ export default class RouterClass {
             component: () => import('@/views/rxjs/commonly.vue')
         },
         {
+            path: 'list',
+            meta:{ title: '列表', icon: 'el-icon-tickets' },
+            component: () => import('@/views/list.vue')
+        },
+        {
             path: 'rich-text',
             meta:{ title: '富文本', icon: 'el-icon-attract' },
             component: () => import('@/views/rich-text.vue')
@@ -44,23 +49,23 @@ export default class RouterClass {
             path: 'test',
             meta:{ title: '测试路由', icon: 'el-icon-attract' },
             component: (h) => h(vue2.compile(`
-                <div><h1 style='line-height: 50px;color:#666'>测试路由</h1><router-view /></div>
+                <div class="page-container"><h1 style='line-height: 50px;color:#666'>测试路由</h1><router-view /></div>
             `)),
             children: [
                 {
                     path: 'test1',
                     meta:{ title: '第一个', icon: 'el-icon-scissors' },
-                    component: (h) => h(vue2.compile('<el-card><h1>测试页1</h1></el-card>'))
+                    component: (h) => h(vue2.compile('<div class="page-container"><el-card><h1>测试页1</h1></el-card></div>'))
                 },
                 {
                     path: 'test2',
                     meta:{ title: '第二个', icon: 'el-icon-coordinate' },
-                    component: (h) => h(vue2.compile('<el-card><h1>测试页2</h1></el-card>'))
+                    component: (h) => h(vue2.compile('<div class="page-container"><el-card><h1>测试页2</h1></el-card></div>'))
                 },
                 {
                     path: 'test3',
                     meta:{ title: '第三个', icon: 'el-icon-pie-chart' },
-                    component: (h) => h(vue2.compile('<el-card><h1>测试页3</h1></el-card>'))
+                    component: (h) => h(vue2.compile('<div class="page-container"><el-card><h1>测试页3</h1></el-card></div>'))
                 },
             ]
         },
@@ -90,6 +95,7 @@ export default class RouterClass {
     //首页
     private static homeRouter: RouteConfig = {
         path: '',
+        name: 'home',
         meta: { title: '首页' },
         component: (h) => import("@/views/home.vue"),
     }
@@ -116,7 +122,6 @@ export default class RouterClass {
                 routes[0].children.push(v)
             }
         })
-        console.log(routes)
         
         RouterClass.__router.addRoutes(routes)
         store.state.routers = routes[0].children
@@ -164,12 +169,24 @@ export default class RouterClass {
             if(this.noAuthUrl.has(to.path)){
                 next();
             }else if(sessionStorage.getItem('login')){
+                // this.moveHearOperating(to, form)
                 next();
             }else {
                 next('/login')
             }
         })
+        router.afterEach((to, from) => {
+            // to and from are both route objects.
+            this.moveHearOperating(to, from)
+        })
+    }
 
+    private static moveHearOperating(to: Route, from: Route){
+        if(!to.name) return;
+        setTimeout(() => {
+            console.log(document.querySelector(`[header-name=${to.name}]`))
+            console.log(to.name)
+        },100)
     }
 
 }

@@ -41,6 +41,7 @@ export default class TableComponent extends Vue{
     @Prop({type: String}) private readonly url!: string
     @Prop({type: String, default: 'GET'}) private readonly method!: AxiosRequestConfig['method']
     @Prop({type: Array}) private filter!: TableFilter
+    @Prop() private readonly selection!: boolean
     private http!: Subscription
     private total: number = 0;
     private condition: any = {
@@ -71,10 +72,10 @@ export default class TableComponent extends Vue{
     }
 
     private created(){
+        console.log(this) 
         if(this.data) this.tabledatas = this.data
         if(!this.url) return;
         this.getData()
-        console.log(this.filter)
     }
     
     private getData(){

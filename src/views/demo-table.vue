@@ -1,5 +1,5 @@
 <template>
-    <div class="app-container">
+    <div class="page-container">
         <div style="color:#666">注:后续添加筛选,分页功能</div><br>
         <el-card>
             <div slot="header" class="clearfix">

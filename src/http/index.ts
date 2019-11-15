@@ -37,7 +37,7 @@ import request from './request'
     }
 
     public static getTable(length: number = 2): Observable<CommonResponseData&{data:{date: string, name: string, address: string}[],total:number}> {
-        return request({method:'GET', url: '/tableData'})
+        return request({method:'GET', url: '/tableData', params:{length}})
     }
 
     /**

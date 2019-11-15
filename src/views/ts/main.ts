@@ -36,9 +36,10 @@ export default class MainComponent extends Vue{
 
     @State('routers') private routers!: RouteConfig[]
     private menuOpeneds: string[] = [];
+    private isCollapse: boolean = false
 
     private async logout(): Promise<void> {
-        await this.$confirm('确定退出吗')
+        await this.$confirm('确定退出吗').toPromise()
         sessionStorage.removeItem('login');
         this.$router.replace('/login');
     }

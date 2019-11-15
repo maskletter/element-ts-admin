@@ -8,6 +8,7 @@ export default class HomeComponent extends Vue {
 
     private echartData1: any = null;
     private echartData2: any = null;
+    private remarks: string = '';
 
 
     private created(){

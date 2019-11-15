@@ -23,6 +23,9 @@ module.exports = (app) => {
                     path: 'rxjs'
                 },
                 {
+                    path: 'list'
+                },
+                {
                     path: 'rich-text'
                 },
                 {
@@ -39,7 +42,30 @@ module.exports = (app) => {
             })
         })
     })
-
+    app.get('/getArticleList', (req, res) => {
+        sendData({
+            data: [
+                { id: 1, name: '数学' },
+                { id: 1, name: '语文' },
+                { id: 1, name: '英语' },
+                { id: 1, name: '政治' },
+                { id: 1, name: '历史' }
+            ]
+        })
+    })
+    app.get('getArticleList', (req, res) => {
+        sendData(res, {
+            data: Array(req.query.length?parseInt(req.query.length):5).fill({
+                id: 1,
+                name: '这是一篇文字',
+                date: new Date().getTime(),
+                ready: 20,
+                like: 18,
+                address: '上海市普陀区金沙江路 1518 弄'
+            }),
+            total: 200
+        })
+    })
     app.get('/tableData', (req, res) => {
         sendData(res, {
             data: Array(req.query.length?parseInt(req.query.length):5).fill({

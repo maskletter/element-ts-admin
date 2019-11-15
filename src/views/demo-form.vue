@@ -1,5 +1,5 @@
 <template>
-    <div class="app-container">
+    <div class="page-container">
         <el-card>
             <div slot="header" class="clearfix">
                 <span>表单组件</span>

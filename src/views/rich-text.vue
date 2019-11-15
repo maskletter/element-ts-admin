@@ -1,5 +1,5 @@
 <template>
-    <div class="app-container">
+    <div class="page-container">
         <el-card>
             <ckeditor ref='$ckeditor' v-model="ckeditorContent" />
             <el-button @click='getCkeditorValue'>获取内容</el-button>

@@ -1,5 +1,6 @@
 <template>
-    <div class="app-container">
+    <div class="page-container">
+        <div header-name='home'></div>
         <el-row :gutter="20">
             <el-col :span='6' >
                 <el-card class="total-group red">
@@ -82,21 +83,11 @@
                     <div slot="header" class="clearfix">
                         <span>备注</span>
                     </div>
-                    <el-input placeholder='请输入' /><br><br>
+                    <el-input placeholder='请输入' v-model="remarks" /><br><br>
                     <el-button type='primary'>确定</el-button>
                 </el-card>
             </el-col>
         </el-row>
-        <h1>Hello, ts</h1><br>
-        <hr><br>
-        通过json渲染,实现快速创建表单及列表显示<br><br>
-        <pre style="font-size: 25px;">
-            &lt;MlTable /&gt; <router-link to="/table">点击查看</router-link>
-            &lt;MlForm /&gt; <router-link to="/form">点击查看</router-link>
-        </pre>
-        <div>
-            更新说明: MlTable标签添加url属性，配置url，直接调用内置http请求获取接口数据并渲染到页面
-        </div>
     </div>
 </template>
 <script src='./ts/home'></script>

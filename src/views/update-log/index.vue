@@ -1,6 +1,5 @@
 <template>
-    <div class="app-container">
-        <h1 style="font-size: 34px;color: #666">更新日志</h1><br>
+    <div class="page-container">
         <el-timeline>
              <el-timeline-item v-for='item in logs' :key="item.time" :timestamp="item.time" placement="top">    
                 <el-card>
