@@ -9,6 +9,13 @@ export default class HomeComponent extends Vue {
     private echartData1: any = null;
     private echartData2: any = null;
     private remarks: string = '';
+    private listData: any[] = [
+        { title: '标题一', content: '内容内容内容内容内容内容内容内容' },
+        { title: '标题二', image: require('@/assets/20191111122220.png'), content: '内容内容内容内容内容内容内容内容' },
+        { title: '标题三', content: '内容内容内容内容内容内容内容内容' },
+        { title: '标题一1', content: '内容内容内容内容内容内容内容内容' },
+        { title: '标题二2', image: require('@/assets/20191111122220.png'), content: '内容内容内容内容内容内容内容内容' },
+    ]
 
 
     private created(){
@@ -27,5 +34,6 @@ export default class HomeComponent extends Vue {
             type: 'text'
         }
     }
+
 
 }

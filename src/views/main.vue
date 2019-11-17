@@ -43,8 +43,8 @@
                 </div>
                 
             </el-main>
-        </el-container class="app-container">
-    </el-container class="app-container">
+        </el-container>
+    </el-container>
 </template>
 
 <style>
@@ -67,18 +67,18 @@
     &>.el-header{ flex: 1; }
 }
 .animation-enter-active {
-    transition: all 0.5s ease;position: absolute;left: 0px;width: 100%;
-    transform: translateX(30%);z-index: 2;opacity: 0;
+    transition: all 0.5s ease;position: absolute;width: 100%;
+    transform: translate3d(30%, 0, 0);z-index: 2;opacity: 0;
 }
 .animation-leave-active {
-    transition: all 0.5s ease;position: absolute;left: 0px;width: 100%;
+    transition: all 0.5s ease;position: absolute;width: 100%;
 }
 .animation-enter-to{
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
     opacity: 1;
 }
 .animation-leave-to{
-    transform: translateX(-50px);
+    transform: translate3d(-50px, 0, 0);
     opacity: 1;
 }
 </style>
