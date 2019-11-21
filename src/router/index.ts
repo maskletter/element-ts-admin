@@ -37,13 +37,18 @@ export default class RouterClass {
         },
         {
             path: 'list',
-            meta:{ title: '列表', icon: 'el-icon-tickets' },
+            meta:{ title: '列表1', icon: 'el-icon-tickets' },
             component: () => import('@/views/list.vue')
         },
         {
             path: 'rich-text',
             meta:{ title: '富文本', icon: 'el-icon-attract' },
             component: () => import('@/views/rich-text.vue')
+        },
+        {
+            path: 'tool',
+            meta:{ title: '小工具', icon: 'el-icon-tickets' },
+            component: () => import('@/views/tool.vue')
         },
         {
             path: 'test',
@@ -89,6 +94,11 @@ export default class RouterClass {
             path: '/update-log',
             meta:{ title: '更新日志 ', icon: 'el-icon-postcard' },
             component: () => import('@/views/update-log/index.vue')
+        },
+        {
+            path: '/permission',
+            meta:{ title: '权限管理 ', icon: 'el-icon-postcard' },
+            component: () => import('@/permission/user.vue')
         }
     ]
 
