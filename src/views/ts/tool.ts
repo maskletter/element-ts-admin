@@ -3,7 +3,7 @@ import { Prop, Ref, Watch } from 'vue-property-decorator'
 import Vue from 'vue'
 import CropperComponent from '@/component/ts/cropper';
 import QiNiu from '@/lib/qiniu';
-import { catchError, mergeMap } from 'rxjs/operators';
+import { catchError, mergeMap, tap } from 'rxjs/operators';
 
 @Component
 export default class ToolComponent extends Vue {
@@ -22,3 +22,18 @@ export default class ToolComponent extends Vue {
     }
 
 }
+
+// type AlbumAPIResponse = {
+//     title: string
+//     artist?: {
+//       name: string
+//       bio?: string
+//       previousAlbums?: string[]
+//     }
+//   };
+  
+//   declare const album: AlbumAPIResponse;
+  
+  // With optional chaining, you can write
+  // code like this:
+  

@@ -10,16 +10,22 @@ import { Observable, BehaviorSubject } from 'rxjs';
 const XMLHttpRequest =  (window as any)['XMLHttpRequest'];
 
 
-function getArrayBuffer(url: string): Observable<any>{
+function getArrayBuffer(type:string,url: string, headers: any, responseType: string, sendData: any): Observable<any>{
     return Observable.create((obs: RxjsCreate) => {
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', url);
-        xhr.responseType = 'arraybuffer';
+        // xhr.setRequestHeader
+        xhr.open(type, url);
+        if(responseType) xhr.responseType = 'arraybuffer';
+        if(headers){
+            for(var i in headers){
+                xhr.setRequestHeader(i, headers[i])
+            }
+        }
         xhr.onload = function(){
             obs.next(xhr.response)
             obs.complete()
         }
-        xhr.send();
+        xhr.send(sendData);
     })
     
 }
@@ -33,12 +39,13 @@ class XMLHttpRequest2{
 
     constructor(){
         setTimeout(async () => {
-            // let result = null;
-            if(this.responseType == 'arraybuffer'){
-                this.response = await getArrayBuffer(this.url).toPromise()
-            }else{
-                await stop(1000)
+            if(!this.responseText){
+                this.response = await getArrayBuffer(this.type, this.url, this.headers,this.responseType, this.sendData).toPromise()
             }
+            if(typeof(this.response) == 'string'){
+                this.responseText = this.response
+            }
+            await stop(1000)
             this.onreadystatechange({})
             this.onload(this.response)
         })
@@ -50,12 +57,19 @@ class XMLHttpRequest2{
     private responseType: string = '';
     private response: any = {}
     private url: string = '';
+    private data: any = '';
+    private sendData: any = '';
+    private type: any = '';
+    private headers: any = {};
 
-    public open(method: string, url: any, async: boolean){
+    public async open(method: string, url: any, async: boolean){
         this.url = url
+        this.type = method
         url = url.split('?')
-        const _data = data.get(url[0])||{code:0,msg:'请求出错'};
-        this.responseText = JSON.stringify(_data)
+        if(data.get(url[0])){
+            this.responseText = JSON.stringify(data.get(url[0]))
+        }
+        url[1] && (this.data = url[1])
     }
 
     public onreadystatechange(a: any){
@@ -63,7 +77,7 @@ class XMLHttpRequest2{
     }
 
     public send(data: any){
-        
+        this.sendData = data
     }
 
     public onload(a: any){
@@ -72,6 +86,10 @@ class XMLHttpRequest2{
 
     public abort(){
 
+    }
+
+    public setRequestHeader(key: string, content: string){
+        this.headers[key] = content
     }
 
 }

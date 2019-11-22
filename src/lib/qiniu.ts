@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import { Observable, of, from } from 'rxjs';
+import { Observable, of, from, throwError } from 'rxjs';
 import request from '@/http/request';
 import { mergeMap, tap, map } from 'rxjs/operators';
 import { CommonResponseData } from '@/http';
@@ -22,15 +22,17 @@ export default class QiNiu {
     }
 
     //通过base64上传到七牛云
-    public static upLoadBase64(base64: string): Observable<string> {
-        let url: string = '';
-        const key: string = Math.random()+new Date().getTime()+'';
-        return of(key).pipe(
-            mergeMap(v => QiNiu.getQiNiuToken(v)),
+    public static upLoadBase64(base64: string): Observable<any> {
+        return of(Math.random()+new Date().getTime()+'').pipe(
+            mergeMap(v => QiNiu.getQiNiuToken(v).pipe(tap(_v => _v.data.key = v))),
             map(v => v.data),
-            tap(v => url = v.url),
-            mergeMap(v => QiNiu.__base64(base64, key, v.token)),
-            map(v => url)
+            mergeMap(v => QiNiu.__base64(base64, v.key, v.token).pipe(
+                tap(v => {
+                    if(v.data.error){
+                        throw v.data;
+                    }
+                })
+            ))
         )
     }
 
