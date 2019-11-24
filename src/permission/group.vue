@@ -10,4 +10,4 @@
         </el-card>
     </div>
 </template>
-<script src='./ts/user'></script>
+<script src='./ts/group'></script>

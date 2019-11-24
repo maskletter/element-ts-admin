@@ -1,7 +1,7 @@
 
 <template>
     <div>
-        <el-form :model="form" :rules="rules" label-width='120px' ref='form'>
+        <el-form :model="form" :rules="rules" :label-width='$attrs["label-width"]' ref='form'>
             <el-form-item v-for="(item,key) in data" :label='item.label' :key='key' :prop='key'>
                 <component 
                     :is='"ml-"+getFormType(item.type)'
@@ -18,8 +18,8 @@
                 <MlRadio v-if="getFormType(item.type) == 'radio'" v-model="form[key]" :type='item.type' :data='item.data' :attr='item.attr' :placeholder='item.placeholder'></MlRadio>
                 <MlCheckbox v-if="getFormType(item.type) == 'checkbox'" v-model="form[key]" :type='item.type' :data='item.data' :attr='item.attr' :placeholder='item.placeholder'></MlCheckbox> -->
             </el-form-item>
-            <el-form-item>
-                <el-button type='primary' @click="submit">登录</el-button>
+            <el-form-item><br>
+                <el-button type='primary' @click="submit">{{$attrs['confirm-button-text']||'确定'}}</el-button>
                 <el-button @click="$refs.form.resetFields()">重置</el-button>
             </el-form-item>
         </el-form>

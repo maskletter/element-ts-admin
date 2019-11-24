@@ -1,6 +1,7 @@
 import vue from 'vue'
 import vue2 from 'vue/dist/vue.esm.js'
 import Router, { RouterOptions, RouteConfig, Route } from 'vue-router'
+import LayuiComponent from '@/layui.vue'
 import store from '../store'
 declare const location: any;
 const originalPush = Router.prototype.push;
@@ -96,9 +97,26 @@ export default class RouterClass {
             component: () => import('@/views/update-log/index.vue')
         },
         {
-            path: '/permission',
-            meta:{ title: '权限管理 ', icon: 'el-icon-postcard' },
-            component: () => import('@/permission/user.vue')
+            path: '/user',
+            meta:{ title: '用户管理 ', icon: 'el-icon-postcard' },
+            component: LayuiComponent,
+            children: [
+                {
+                    path: 'user',
+                    meta:{ title: '用户', icon: 'el-icon-scissors' },
+                    component: () => import('@/permission/user.vue')
+                },
+                {
+                    path: 'group',
+                    meta:{ title: '权限组', icon: 'el-icon-coordinate' },
+                    component: () => import('@/permission/group.vue')
+                },
+                {
+                    path: 'permission',
+                    meta:{ title: '权限', icon: 'el-icon-pie-chart' },
+                    component: () => import('@/permission/permission.vue')
+                },
+            ]
         }
     ]
 
