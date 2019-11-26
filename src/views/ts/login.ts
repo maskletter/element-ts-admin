@@ -16,8 +16,8 @@ export default class LoginComponent extends Vue{
 
     private loading: boolean = false;
     private form = {
-        username: 'tom',
-        password: '123'
+        username: 'admin',
+        password: 'admin'
     }
     private routeNext!: Function;
 
@@ -28,16 +28,14 @@ export default class LoginComponent extends Vue{
         
         HttpPermission.getUserAuth(this.form).pipe(
             tap(v => this.loading = false),
-            catchError(e => {
-                this.$message({type:'error', message: e}).subscribe()
-                this.loading = false
-                return e
-            })
         ).subscribe(res => {
             Router.newCreateAuth(res)
             sessionStorage.setItem('login', 'true');
             sessionStorage.setItem('auth', JSON.stringify(res));
             this.$router.push('/')
+        }, error => {
+            this.$message({type:'error', message: error}).subscribe()
+            this.loading = false
         })
         // request.Login(this.form).pipe(
         //     tap(v => this.loading = false),

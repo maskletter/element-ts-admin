@@ -1,7 +1,7 @@
 import vue from 'vue'
 import { Input, Form, FormItem, Card, Button, Menu, MenuItem, Submenu, Header, Container,
     Aside, DropdownItem, DropdownMenu, Main, Dropdown, Table, TableColumn, Radio, Checkbox, Select,
-    Dialog, Tree,
+    Dialog, Tree, Badge,
     CheckboxGroup, RadioGroup, Option, Col, Row, Pagination, MessageBox, Loading, Timeline, TimelineItem, Message
 } from 'element-ui'
 import { Observable, from, throwError, empty } from 'rxjs'
@@ -79,6 +79,7 @@ vue.use(Input)
     .use(Pagination)
     .use(Dialog)
     .use(Tree)
+    .use(Badge)
 // vue.component(Table.name, Table)
 // vue.component(Input.name, Input)
 // vue.component(Input.name, Input)

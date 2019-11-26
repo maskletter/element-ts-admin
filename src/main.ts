@@ -30,6 +30,6 @@ new Vue({
 }).$mount('#app')
 
 if(sessionStorage.getItem('auth')){
-    router.setAuth(JSON.parse(<string>sessionStorage.getItem('auth')))
+    router.newCreateAuth(JSON.parse(<string>sessionStorage.getItem('auth')))
     // store.state.routers = routes[0].children
 }

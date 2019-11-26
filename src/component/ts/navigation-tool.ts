@@ -11,6 +11,7 @@ export default class NavigationToolComponent extends Vue {
     private mounted(){
         this.$navigationUrlTool = (document.getElementById('navigation-ui-tool') as HTMLElement);
         this.$navigationUrlTool.appendChild(this.$tool)
+        setTimeout(() => this.$tool.classList.add('active')) 
         this.fullPath = this.$route.fullPath;
     }
 
@@ -18,9 +19,11 @@ export default class NavigationToolComponent extends Vue {
     @Watch('$route')
     onRouteChange(val: Route){
         if(val.fullPath == this.fullPath){
+            this.$tool.classList.remove('active')
             this.$navigationUrlTool.appendChild(this.$tool)
         }else{
             this.$el.appendChild(this.$tool)
+            setTimeout(() => this.$tool.classList.add('active')) 
         }
     }
 

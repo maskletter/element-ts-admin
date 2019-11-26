@@ -52,7 +52,6 @@ export default class TableComponent extends Vue{
 
     @Watch('data')
     private onDataChange(val: any){
-        console.log(val)
         this.tabledatas = this.data
     }
 

@@ -44,7 +44,6 @@ export default class MainComponent extends Vue{
         this.$router.replace('/login');
     }
 
-
     private menuSelectEvent(e: any){
         console.log(e)
     }

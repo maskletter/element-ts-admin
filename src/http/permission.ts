@@ -31,13 +31,6 @@ const defaultPermissionList = [
         children: [],
     },
     {
-        id: 16,
-        date: '2016-05-02',
-        name: '列表',
-        path: 'list',
-        children: [],
-    },
-    {
         id: 5,
         date: '2016-05-02',
         name: '富文本',
@@ -290,7 +283,7 @@ export default class HttpPermission{
                 })
             ).subscribe()
             if(isError){
-                obs.error('用户名或密码不正确')
+                obs.error(new Error('用户名或密码不正确'))
                 obs.complete()
             }
            

@@ -38,7 +38,7 @@ export default class RouterClass {
         },
         {
             path: 'list',
-            meta:{ title: '列表1', icon: 'el-icon-tickets' },
+            meta:{ title: '列表', icon: 'el-icon-tickets' },
             component: () => import('@/views/list.vue')
         },
         {
@@ -75,29 +75,8 @@ export default class RouterClass {
                 },
             ]
         },
-        
         {
-            path: '',
-            redirect: 'table'
-        }
-    ]
-    //默认无需权限的路由页面
-    private static readonly defaultRouters: RouteConfig[] = [
-        { 
-            path: '/login',
-            component: () => import("@/views/login.vue")
-        }
-    ]
-
-    //默认无需权限添加到左侧的路由页面
-    private static readonly noAuthMenuRouters: RouteConfig[] = [
-        {
-            path: '/update-log',
-            meta:{ title: '更新日志 ', icon: 'el-icon-postcard' },
-            component: () => import('@/views/update-log/index.vue')
-        },
-        {
-            path: '/user',
+            path: 'user',
             meta:{ title: '用户管理 ', icon: 'el-icon-postcard' },
             component: LayuiComponent,
             children: [
@@ -117,6 +96,28 @@ export default class RouterClass {
                     component: () => import('@/permission/permission.vue')
                 },
             ]
+        }
+       
+    ]
+    //默认无需权限的路由页面
+    private static readonly defaultRouters: RouteConfig[] = [
+        { 
+            path: '/login',
+            component: () => import("@/views/login.vue")
+        }
+    ]
+
+    //默认无需权限添加到左侧的路由页面
+    private static readonly noAuthMenuRouters: RouteConfig[] = [
+        {
+            path: '',
+            hidden: true,
+            redirect: 'table'
+        },
+        {
+            path: '/update-log',
+            meta:{ title: '更新日志 ', icon: 'el-icon-postcard' },
+            component: () => import('@/views/update-log/index.vue')
         }
     ]
 
@@ -157,8 +158,14 @@ export default class RouterClass {
     }
 
     public static newCreateAuth(routerConfig: RouteConfig[]){
-        const routerResult: RouteConfig[] = [];
-        RouterClass.eachPermission(RouterClass.permission, routerConfig, routerResult)
+        let routerResult: RouteConfig[] = [];
+        
+        if(typeof(routerConfig) == 'string'){
+            routerResult = RouterClass.permission
+        }else{
+            RouterClass.eachPermission(RouterClass.permission, routerConfig, routerResult)
+        }
+        
 
         const routes = [
             { 
@@ -179,7 +186,7 @@ export default class RouterClass {
         })
         RouterClass.__router.addRoutes(routes)
         store.state.routers = routes[0].children
-
+        console.log(routes)
         return routerResult
     }
     public static eachPermission(permissionMap: RouteConfig[], routerConfig: RouteConfig[], routerResult: RouteConfig[]){
