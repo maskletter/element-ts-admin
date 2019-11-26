@@ -156,6 +156,46 @@ export default class RouterClass {
         return routes;
     }
 
+    public static newCreateAuth(routerConfig: RouteConfig[]){
+        const routerResult: RouteConfig[] = [];
+        RouterClass.eachPermission(RouterClass.permission, routerConfig, routerResult)
+
+        const routes = [
+            { 
+                path: '/',
+                component: () => import("@/views/main.vue"),
+                children: [
+                    RouterClass.homeRouter,
+                    ...routerResult
+                ]
+            }
+        ]
+        
+        RouterClass.noAuthMenuRouters.forEach(v => {
+            if(!v.hidden) {
+                v.path = v.path.replace(/^\//,'')
+                routes[0].children.push(v)
+            }
+        })
+        RouterClass.__router.addRoutes(routes)
+        store.state.routers = routes[0].children
+
+        return routerResult
+    }
+    public static eachPermission(permissionMap: RouteConfig[], routerConfig: RouteConfig[], routerResult: RouteConfig[]){
+        routerConfig.forEach(v => {
+            const findRouter = permissionMap.find(_v => v.path == _v.path)
+            if(!findRouter) return
+            const _children: RouteConfig[] = []
+            const children: RouteConfig[]|undefined = findRouter.children;
+            const _router = { ...findRouter, children: _children } 
+            if(v.children && children){
+                RouterClass.eachPermission(children, v.children, _children)
+            }
+            routerResult.push(_router)
+        })
+    }
+
     private static createAuth(routerConfig: AuthRouterConfig[], permissionConfig: RouteConfig[] = RouterClass.permission, newChildren: any[]): RouteConfig[]{
         let _router: RouteConfig[] = [];
         routerConfig.forEach(v => {
@@ -203,19 +243,9 @@ export default class RouterClass {
                 next('/login')
             }
         })
-        router.afterEach((to, from) => {
-            // to and from are both route objects.
-            this.moveHearOperating(to, from)
-        })
     }
 
-    private static moveHearOperating(to: Route, from: Route){
-        if(!to.name) return;
-        setTimeout(() => {
-            console.log(document.querySelector(`[header-name=${to.name}]`))
-            console.log(to.name)
-        },100)
-    }
+ 
 
 }
 

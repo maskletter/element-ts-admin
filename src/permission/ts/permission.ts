@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component';
 import { TableColumn } from '@/component/ts/table';
-import HttpPermission from '@/http/permission';
+import HttpPermission, { Permission } from '@/http/permission';
 import { Watch, Ref } from 'vue-property-decorator';
 import FormComponent, { CreateFormData } from '@/component/ts/form';
 import { mergeMap, tap, skipUntil } from 'rxjs/operators';
@@ -9,7 +9,7 @@ import { mergeMap, tap, skipUntil } from 'rxjs/operators';
 export default class PermissionComponent extends Vue {
 
     @Ref() private readonly $form!: FormComponent;
-    private data: any[] = []
+    private data: Permission.permission[] = []
     private column: TableColumn = [
         { prop: 'name', title: '姓名' },
         { prop: 'path', title: '路径' },
@@ -79,18 +79,7 @@ export default class PermissionComponent extends Vue {
             mergeMap(v => this.$hideLoading()),
             tap(v => this.$message({type:'success',message:'编辑成功'}).subscribe())
         ).subscribe()
-        // HttpPermission.savePermission(e).pipe(
-        //     mergeMap(v => {
-        //         if(this.editId && this.isAddChild){
-        //             return HttpPermission.addPermission(e)
-        //         }else{
-        //             return HttpPermission.savePermission(e)
-        //         }
-        //     }),
-        //     mergeMap(v => HttpPermission.getPermissionList()),
-        //     tap(v => {{this.editId = 0, this.showDialog=false}}),
-        //     skipUntil(this.$message({type:'success',message:'编辑成功'}))
-        // ).subscribe()
+     
     }
 
 

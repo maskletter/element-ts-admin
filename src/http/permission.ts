@@ -1,5 +1,5 @@
-import { Observable } from 'rxjs';
-import { tap, filter, mergeMap, map } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { tap, filter, mergeMap, map, toArray, catchError } from 'rxjs/operators';
 
 const defaultPermissionList = [
     {
@@ -119,6 +119,14 @@ const defaultPermissionList = [
 const defaultUserList = [
     { id: 1, username: 'admin', password: 'admin', groupId: 1 }
 ]
+const defaultGroupList = [
+    {
+        id: 1,
+        keywrod: 'admin',
+        name: '管理员',
+        permission: '*'
+    }
+]
 function getAllPermission(item: any[], array: any[]){
     item.forEach(v => {
         array.push(v);
@@ -127,29 +135,73 @@ function getAllPermission(item: any[], array: any[]){
         }
     })
 }
+export namespace Permission{
+    export interface group {
+        id: number
+        name: string
+        permission: string
+    }
+    export interface user {
+        id: number
+        username: string, 
+        password: string, 
+        groupId: number
+    }
+    export interface permission {
+        id: number
+        date: string,
+        name: string,
+        path: string
+        children: permission[]
+    }
+}
+
 export default class HttpPermission{
 
-    public static getUserList(): Observable<any[]>{
+    public static getUserList(): Observable<Permission.user[]>{
         return Observable.create((obs: any) => {
             obs.next(localStorage.userList ? JSON.parse(localStorage.userList) : defaultUserList)
             obs.complete()
         })
     }
+    public static addUser(params:{ username: string, password: string, groupId: number }): Observable<any> {
+        return HttpPermission.getUserList().pipe(
+            tap(v => {
+                const id = Math.floor((new Date().getTime() / 1000000+Math.random()*100000));
+                v.push({ id, ...params })
+                localStorage.userList = JSON.stringify(v)
+            })
+        )
+    }
 
-    public static getGroupList(): Observable<any[]>{
+    public static getGroupList(): Observable<Permission.group[]>{
         return Observable.create((obs: any) => {
-            obs.next([
-                {
-                    id: 1,
-                    keywrod: 'admin',
-                    name: '管理员'
-                }
-            ])
+            obs.next(localStorage.defaultGroupList ? JSON.parse(localStorage.defaultGroupList) : defaultGroupList)
             obs.complete()
         })
     }
+    public static addGroup(params: { name: string, permission: string }): Observable<any> {
+        return HttpPermission.getGroupList().pipe(
+            tap(v => {
+                const id = Math.floor((new Date().getTime() / 1000000+Math.random()*100000));
+                v.push({ id, ...params })
+                localStorage.defaultGroupList = JSON.stringify(v)
+            })
+        )
+    }
+    public static deleteGroup(id: number): Observable<any> {
+        return HttpPermission.getGroupList().pipe(
+                mergeMap(v => v),
+                filter(v => v.id != id),
+                toArray(),
+                tap(v => {
+                    // console.log(JSON.stringify(v))
+                    localStorage.defaultGroupList = JSON.stringify(v)
+                })
+            )
+    }
 
-    public static getPermissionList(): Observable<any[]>{
+    public static getPermissionList(): Observable<Permission.permission[]>{
         return Observable.create((obs: any) => {
             obs.next(localStorage.permissionList? JSON.parse(localStorage.permissionList):defaultPermissionList);
             obs.complete()
@@ -167,7 +219,6 @@ export default class HttpPermission{
                     else return v
                 }),
                 tap(v => {
-                    console.log(v)
                     const data = {
                         id: Math.floor((new Date().getTime() / 1000000+Math.random()*100000)),
                         name: params.name,
@@ -209,4 +260,58 @@ export default class HttpPermission{
         })
     }
 
+    public static getUserAuth(params:{ username: string, password: string }): Observable<any>  {
+        return Observable.create((obs: any) => {
+            let isError: boolean = true;
+            HttpPermission.getUserList().pipe(
+                mergeMap(v => v),
+                filter(v => v.username == params.username && v.password == params.password),
+                map(v => v.groupId),
+                mergeMap(groupId => HttpPermission.getGroupList().pipe( 
+                    mergeMap(v => v),
+                    filter(v => v.id == groupId),
+                    map(v => v.permission)
+                )),
+                mergeMap(permission => {
+                    isError = false;
+                    if(permission == '*') return of('*');
+                    else return HttpPermission.getPermissionList().pipe(
+                        map(v => {
+                            const auth: string[] = permission.split('-');
+                            const route: any[] = []
+                            mockGetAuth(auth, route, v)
+                            return route
+                        })
+                    )
+                }),
+                tap(v => {
+                    obs.next(v)
+                    obs.complete()
+                })
+            ).subscribe()
+            if(isError){
+                obs.error('用户名或密码不正确')
+                obs.complete()
+            }
+           
+        })
+    }
+
+}
+
+function mockGetAuth(ids: string[], route: any[], permissions: Permission.permission[]){
+    
+    permissions.forEach(v => {
+        if(ids.indexOf(v.id+'') == -1) return;
+        const _children: any[] = [];
+        const children = v.children;
+        const router = {...v, children: _children};
+        route.push(router);
+        if(children && children.length){
+            mockGetAuth(ids, _children, children)
+        }
+        
+        // console.log(v)
+       
+    })
 }
