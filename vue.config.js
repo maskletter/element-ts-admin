@@ -2,7 +2,14 @@ module.exports = {
 
     configureWebpack: {
         externals: {
-            "CKEDITOR": "window.CKEDITOR"
+            "echarts": "echarts",
+            "cropperjs": "Cropper",
+            "simplemde": "SimpleMDE",
+            "axios": "axios"
+        },
+        resolve: {
+            alias: {
+            }
         }
     },
 

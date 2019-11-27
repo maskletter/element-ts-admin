@@ -2,9 +2,6 @@ import Component from "vue-class-component";
 import { Prop, Watch, Ref } from 'vue-property-decorator'
 import Vue from 'vue'
 import echart from 'echarts'
-// import * as ff1 from 'echarts/src/theme/dark.js'
-import 'echarts/theme/macarons';
-import 'echarts-liquidfill'
 @Component
 export default class EchartComponent extends Vue {
 

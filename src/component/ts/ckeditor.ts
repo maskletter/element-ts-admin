@@ -1,13 +1,9 @@
 import Component from "vue-class-component";
 import Vue from 'vue'
-import 'ckeditor4';
 import { Ref, Prop, Model, Watch } from 'vue-property-decorator';
 import { Observable, interval } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
-// import '@types/ckeditor'
-/// <reference path="@types/ckeditor" />
 
-// import ckeditor from 'ckeditor4/ckeditor.js'
 @Component
 export default class CkeditorComponent extends Vue {
 
