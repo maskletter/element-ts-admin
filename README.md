@@ -1,5 +1,7 @@
 # 一个基于Vue+ElementUI，参杂着点rxjs的后台管理系统
 
+传送门: [预览地址](https://maskletter.github.io/element-ts-admin/dist/index.html)
+
 * vue          2.6.10
 * vue-router   3.1.3
 * vuex         3.0.1
