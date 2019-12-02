@@ -1,8 +1,21 @@
+
 module.exports = {
+
+    
+  publicPath: './',
 
     configureWebpack: {
         externals: {
-            "CKEDITOR": "window.CKEDITOR"
+            "vue": "Vue",
+            "echarts": "echarts",
+            "cropperjs": "Cropper",
+            "simplemde": "SimpleMDE",
+            "axios": "axios",
+            "element-ui": "ELEMENT"
+        },
+        resolve: {
+            alias: {
+            }
         }
     },
 

@@ -1,6 +1,7 @@
 import vue from 'vue'
 import vue2 from 'vue/dist/vue.esm.js'
 import Router, { RouterOptions, RouteConfig, Route } from 'vue-router'
+import LayuiComponent from '@/layui.vue'
 import store from '../store'
 declare const location: any;
 const originalPush = Router.prototype.push;
@@ -46,6 +47,11 @@ export default class RouterClass {
             component: () => import('@/views/rich-text.vue')
         },
         {
+            path: 'tool',
+            meta:{ title: '小工具', icon: 'el-icon-tickets' },
+            component: () => import('@/views/tool.vue')
+        },
+        {
             path: 'test',
             meta:{ title: '测试路由', icon: 'el-icon-attract' },
             component: (h) => h(vue2.compile(`
@@ -69,11 +75,29 @@ export default class RouterClass {
                 },
             ]
         },
-        
         {
-            path: '',
-            redirect: 'table'
+            path: 'user',
+            meta:{ title: '用户管理 ', icon: 'el-icon-postcard' },
+            component: LayuiComponent,
+            children: [
+                {
+                    path: 'user',
+                    meta:{ title: '用户', icon: 'el-icon-scissors' },
+                    component: () => import('@/permission/user.vue')
+                },
+                {
+                    path: 'group',
+                    meta:{ title: '权限组', icon: 'el-icon-coordinate' },
+                    component: () => import('@/permission/group.vue')
+                },
+                {
+                    path: 'permission',
+                    meta:{ title: '权限', icon: 'el-icon-pie-chart' },
+                    component: () => import('@/permission/permission.vue')
+                },
+            ]
         }
+       
     ]
     //默认无需权限的路由页面
     private static readonly defaultRouters: RouteConfig[] = [
@@ -85,6 +109,11 @@ export default class RouterClass {
 
     //默认无需权限添加到左侧的路由页面
     private static readonly noAuthMenuRouters: RouteConfig[] = [
+        {
+            path: '',
+            hidden: true,
+            redirect: 'table'
+        },
         {
             path: '/update-log',
             meta:{ title: '更新日志 ', icon: 'el-icon-postcard' },
@@ -126,6 +155,52 @@ export default class RouterClass {
         RouterClass.__router.addRoutes(routes)
         store.state.routers = routes[0].children
         return routes;
+    }
+
+    public static newCreateAuth(routerConfig: RouteConfig[]){
+        let routerResult: RouteConfig[] = [];
+        
+        if(typeof(routerConfig) == 'string'){
+            routerResult = RouterClass.permission
+        }else{
+            RouterClass.eachPermission(RouterClass.permission, routerConfig, routerResult)
+        }
+        
+
+        const routes = [
+            { 
+                path: '/',
+                component: () => import("@/views/main.vue"),
+                children: [
+                    RouterClass.homeRouter,
+                    ...routerResult
+                ]
+            }
+        ]
+        
+        RouterClass.noAuthMenuRouters.forEach(v => {
+            if(!v.hidden) {
+                v.path = v.path.replace(/^\//,'')
+                routes[0].children.push(v)
+            }
+        })
+        RouterClass.__router.addRoutes(routes)
+        store.state.routers = routes[0].children
+        console.log(routes)
+        return routerResult
+    }
+    public static eachPermission(permissionMap: RouteConfig[], routerConfig: RouteConfig[], routerResult: RouteConfig[]){
+        routerConfig.forEach(v => {
+            const findRouter = permissionMap.find(_v => v.path == _v.path)
+            if(!findRouter) return
+            const _children: RouteConfig[] = []
+            const children: RouteConfig[]|undefined = findRouter.children;
+            const _router = { ...findRouter, children: _children } 
+            if(v.children && children){
+                RouterClass.eachPermission(children, v.children, _children)
+            }
+            routerResult.push(_router)
+        })
     }
 
     private static createAuth(routerConfig: AuthRouterConfig[], permissionConfig: RouteConfig[] = RouterClass.permission, newChildren: any[]): RouteConfig[]{
@@ -175,19 +250,9 @@ export default class RouterClass {
                 next('/login')
             }
         })
-        router.afterEach((to, from) => {
-            // to and from are both route objects.
-            this.moveHearOperating(to, from)
-        })
     }
 
-    private static moveHearOperating(to: Route, from: Route){
-        if(!to.name) return;
-        setTimeout(() => {
-            console.log(document.querySelector(`[header-name=${to.name}]`))
-            console.log(to.name)
-        },100)
-    }
+ 
 
 }
 

@@ -29,7 +29,7 @@
         <!-- {{$attrs}} -->
         <el-table :data="tabledatas" style="width:100%" v-bind='$attrs' v-on="$listeners">
             <el-table-column align="center" v-if='selection' type="selection" width="55"></el-table-column>
-            <el-table-column v-for="(item,index) in column" :key='index' :prop="item.prop" :label="item.title" :align='item.align'>
+            <el-table-column v-for="(item,index) in column" :width='item.width' :key='index' :prop="item.prop" :label="item.title" :align='item.align'>
                 <template slot-scope="{row, $index}">
                 <slot :$index='$index' :scope='row' :name='item.slot' v-if='isSlots(item.slot)'></slot>
                 <template v-else>

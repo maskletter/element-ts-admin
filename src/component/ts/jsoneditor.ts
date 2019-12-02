@@ -1,13 +1,11 @@
 import Vue from 'vue';
 import Component from "vue-class-component";
-import jsoneditor from 'jsoneditor'
-import 'jsoneditor/dist/jsoneditor.min.css';
+
 import { Prop, Watch, Ref } from 'vue-property-decorator';
 
 @Component
 export default class jsoneditorComponent extends Vue{
 
-    private jsoneditor!: jsoneditor;
     @Prop() private readonly json!: object;
     @Ref('pre') private readonly $pre!: Element
     private _data: any;

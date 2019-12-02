@@ -3,6 +3,9 @@ import Vue from 'vue'
 // import '~/src/http';
 import request from '@/http'
 import { Route } from "vue-router";
+import { tap, mergeMap, catchError } from 'rxjs/operators';
+import Router from '@/router'
+import HttpPermission from '@/http/permission';
 // import request from 'tool/request'
 // import permission from '../../permission'
 
@@ -23,11 +26,16 @@ export default class LoginComponent extends Vue{
         if(!this.form.password) return this.$message({type:'error', message: '请输入密码'})
         this.loading = true;
         
-        request.Login(this.form).subscribe(res => {
-            this.setAuth(res.auth)
+        HttpPermission.getUserAuth(this.form).pipe(
+            tap(v => this.loading = false),
+        ).subscribe(res => {
+            Router.newCreateAuth(res)
             sessionStorage.setItem('login', 'true');
-            sessionStorage.setItem('auth', JSON.stringify(res.auth));
+            sessionStorage.setItem('auth', JSON.stringify(res));
             this.$router.push('/')
+        }, error => {
+            this.$message({type:'error', message: error}).subscribe()
+            this.loading = false
         })
         
     }

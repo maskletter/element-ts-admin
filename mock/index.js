@@ -1,7 +1,18 @@
+// var mysql = require('mysql');
+// var connection = mysql.createConnection({
+//   host     : 'localhost',
+//   user     : 'me',
+//   password : 'secret',
+//   database : 'my_db'
+// });
+ 
+// connection.connect();
+
 
 function sendData(res, data = { }){
     res.json({code: 1, msg: '', ...data})
 }
+
 
 module.exports = (app) => {
 
@@ -29,6 +40,9 @@ module.exports = (app) => {
                     path: 'rich-text'
                 },
                 {
+                    path: 'tool'
+                },
+                {
                     path: 'test',
                     children: [
                         {
@@ -43,7 +57,7 @@ module.exports = (app) => {
         })
     })
     app.get('/getArticleList', (req, res) => {
-        sendData({
+        sendData(res, {
             data: [
                 { id: 1, name: '数学' },
                 { id: 1, name: '语文' },
@@ -51,6 +65,14 @@ module.exports = (app) => {
                 { id: 1, name: '政治' },
                 { id: 1, name: '历史' }
             ]
+        })
+    })
+    app.post('/qiniu-token', (req, res) => {
+        sendData(res, {
+            data: {
+                token: 'daw58sd85s7e85f7sde5f72137238v',
+                url: 'https://public-img.xxx.com/xxxxxxxxxxxxxxx'
+            }
         })
     })
     app.get('getArticleList', (req, res) => {

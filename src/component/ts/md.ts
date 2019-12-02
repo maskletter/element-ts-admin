@@ -2,7 +2,7 @@ import Component from "vue-class-component";
 import Vue from 'vue'
 import { Ref, Model, Watch } from 'vue-property-decorator';
 import SimpleMDE from 'simplemde'
-import 'simplemde/dist/simplemde.min.css'
+// import 'simplemde/dist/simplemde.min.css'
 import listenKey from '@/lib/listen-key';
 import { Observable, of, interval } from 'rxjs';
 import { takeWhile, mergeMap, tap, catchError, map, delay, skipUntil, take } from 'rxjs/operators';

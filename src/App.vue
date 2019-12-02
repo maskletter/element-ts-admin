@@ -9,7 +9,7 @@
 	</div>
 </template>
 <style lang="scss" >
-*{ margin: 0px;padding: 0px; }
+*{ margin: 0px;padding: 0px;outline: none }
 .app-container{ background: #fff }
 .page-container{ padding: 20px;background: #fff }
 html,body,.container{ height: 100%;overflow:hidden;background: #f5f5f5 }

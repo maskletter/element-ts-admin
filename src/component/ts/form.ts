@@ -125,7 +125,6 @@ export default class FormComponent extends Vue{
 
     @Watch('data')
     private onDataChange(val: CreateFormData){
-        console.log(val)
         this.rules = [];
         this.form = {}
         let _form: any = {};
@@ -140,11 +139,12 @@ export default class FormComponent extends Vue{
         this.form = _form;
         this.$refs.form && (this.$refs.form as any).resetFields()
     }
+    
 
     private submit(): void {
         this.$form.validate((valid: boolean) => {
             if(!valid) return;
-            console.log('success')
+            this.$emit('submit',{...this.form})
         })
     }
 
@@ -169,6 +169,12 @@ export default class FormComponent extends Vue{
                 return 'radio';
             case 'checkbox':
                 return 'checkbox';
+        }
+    }
+
+    public setData(e: any): void{
+        for(let i in e){
+            this.form[i] = e[i]
         }
     }
 

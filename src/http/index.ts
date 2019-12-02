@@ -14,7 +14,7 @@ import request from './request'
      })
  }
 
- interface CommonResponseData{
+ export interface CommonResponseData{
      code: number
      msg: string
      data: any

@@ -72,7 +72,6 @@ export default class TableComponent extends Vue{
     }
 
     private created(){
-        console.log(this) 
         if(this.data) this.tabledatas = this.data
         if(!this.url) return;
         this.getData()

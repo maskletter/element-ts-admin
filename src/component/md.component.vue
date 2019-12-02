@@ -10,5 +10,6 @@ var name = '123213'
 <style lang="scss" scoped>
 .md-container{
     /deep/ .editor-preview-side pre{ padding: 10px;background: #333;color: #fff }
+    /deep/ .editor-toolbar.fullscreen{ z-index: 99 }
 }
 </style>

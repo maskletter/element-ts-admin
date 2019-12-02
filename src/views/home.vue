@@ -87,7 +87,15 @@
                     <el-button type='primary'>确定</el-button>
                 </el-card>
             </el-col>
-        </el-row>
+        </el-row><br>
+        <list :data='listData' :selection='true'>
+            <template slot="operating" slot-scope="{row, index}">
+                <div style="text-align:right">
+                    <span style="color:#ccc;font-size:13px;">2019-09-03 12:43</span>
+                </div>
+                
+            </template>
+        </list>
     </div>
 </template>
 <script src='./ts/home'></script>
