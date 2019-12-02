@@ -1,11 +1,14 @@
+
 module.exports = {
 
     configureWebpack: {
         externals: {
+            "vue": "Vue",
             "echarts": "echarts",
             "cropperjs": "Cropper",
             "simplemde": "SimpleMDE",
-            "axios": "axios"
+            "axios": "axios",
+            "element-ui": "ELEMENT"
         },
         resolve: {
             alias: {

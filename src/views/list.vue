@@ -4,16 +4,16 @@
         <NavigationTool>
             <div>
                 <el-badge :value="12" class="item">
-                    <el-button size="small">评论</el-button>
+                    <el-button size="small" @click="$message('功能未开放').subscribe()">评论</el-button>
                 </el-badge>&nbsp;&nbsp;
                 <el-badge :value="3" class="item">
-                    <el-button size="small">收藏</el-button>
+                    <el-button size="small" @click="$message('功能未开放').subscribe()">收藏</el-button>
                 </el-badge>&nbsp;&nbsp;
                 <el-badge :value="1" class="item" type="primary">
-                    <el-button size="small">点赞</el-button>
+                    <el-button size="small" @click="$message('功能未开放').subscribe()">点赞</el-button>
                 </el-badge>&nbsp;&nbsp;
                 <el-badge :value="2" class="item" type="warning">
-                    <el-button size="small">差评</el-button>
+                    <el-button size="small" @click="$message('功能未开放').subscribe()">差评</el-button>
                 </el-badge>
             </div>
         </NavigationTool>

@@ -24,6 +24,25 @@ const Logs: { time: string, title?: string, data?: string[] }[] = [
             "添加了粘贴图片,打开.md文件等功能",
             "添加了echart图像库",
         ]
+    },
+    {
+        time: '2019-11-27',
+        title: '添加权限认证功能',
+        data: [
+            "添加权限管理页面",
+            "添加权限组管理页面",
+            "添加用户管理页面",
+            "添加权限路由控制功能"
+        ]
+    },
+    {
+        time: '2019-12-02',
+        title: '删减打包体积',
+        data: [
+            "公共库更换CDN调用",
+            "控制打包体积在500kb内",
+            "cdn使用库:cropperjs,simplemde,echarts,highlight,axios"
+        ]
     }
 
 ]

@@ -166,6 +166,43 @@ export default class HttpPermission{
             })
         )
     }
+    public static deleteUser(id: number): Observable<any> {
+        return HttpPermission.getUserList().pipe(
+                mergeMap(v => v),
+                filter(v => v.id != id),
+                toArray(),
+                tap(v => {
+                    localStorage.userList = JSON.stringify(v)
+                })
+            )
+    }
+    public static saveUser(params:{ username: string, password: string, groupId: number, id: number }): Observable<any> {
+        return Observable.create((obs: any) => {
+            let list: any = [];
+            HttpPermission.getUserList().pipe(
+                tap(v => list = v),
+                mergeMap(v => v),
+                filter(v => v.id == params.id),
+                tap(v => {
+                    v.username = params.username
+                    v.password = params.password
+                    v.groupId = params.groupId
+                    localStorage.userList = JSON.stringify(list)
+                }),
+                toArray()
+            ).subscribe(res => {
+                if(res.length){
+                    obs.next()
+                    obs.complete()
+                }else{
+                    obs.error(new Error('用户不存在'))
+                    obs.complete()
+                }
+            })
+           
+            
+        })
+    }
 
     public static getGroupList(): Observable<Permission.group[]>{
         return Observable.create((obs: any) => {
@@ -182,13 +219,38 @@ export default class HttpPermission{
             })
         )
     }
+    public static saveGroup(params:{ name: string, permission: string, id: number }): Observable<any> {
+        return Observable.create((obs: any) => {
+            let list: any = [];
+            HttpPermission.getGroupList().pipe(
+                tap(v => list = v),
+                mergeMap(v => v),
+                filter(v => v.id == params.id),
+                tap(v => {
+                    v.name = params.name
+                    v.permission = params.permission
+                    localStorage.defaultGroupList = JSON.stringify(list)
+                }),
+                toArray()
+            ).subscribe(res => {
+                if(res.length){
+                    obs.next()
+                    obs.complete()
+                }else{
+                    obs.error(new Error('用户不存在'))
+                    obs.complete()
+                }
+            })
+           
+            
+        })
+    }
     public static deleteGroup(id: number): Observable<any> {
         return HttpPermission.getGroupList().pipe(
                 mergeMap(v => v),
                 filter(v => v.id != id),
                 toArray(),
                 tap(v => {
-                    // console.log(JSON.stringify(v))
                     localStorage.defaultGroupList = JSON.stringify(v)
                 })
             )
@@ -236,7 +298,9 @@ export default class HttpPermission{
     public static savePermission(params:{ id: number, name: string, path: string }): Observable<any> {
         
         return Observable.create((obs: any) => {
+            let list: any = [];
             HttpPermission.getPermissionList().pipe(
+                tap(v => list = v),
                 map(v => {
                     const all: any[] = [];
                     getAllPermission(v, all);
@@ -245,7 +309,7 @@ export default class HttpPermission{
                 tap(v => {
                     v.name = params.name
                     v.path = params.path
-                    localStorage.permissionList = JSON.stringify(defaultPermissionList)
+                    localStorage.permissionList = JSON.stringify(list)
                     obs.next()
                     obs.complete()
                 })
@@ -277,15 +341,16 @@ export default class HttpPermission{
                         })
                     )
                 }),
-                tap(v => {
-                    obs.next(v)
+                toArray()
+            ).subscribe(res => {
+                if(res.length){
+                    obs.next(res[0])
                     obs.complete()
-                })
-            ).subscribe()
-            if(isError){
-                obs.error(new Error('用户名或密码不正确'))
-                obs.complete()
-            }
+                }else{
+                    obs.error(new Error('用户名或密码不正确'))
+                    obs.complete()
+                }
+            })
            
         })
     }
@@ -304,7 +369,5 @@ function mockGetAuth(ids: string[], route: any[], permissions: Permission.permis
             mockGetAuth(ids, _children, children)
         }
         
-        // console.log(v)
-       
     })
 }

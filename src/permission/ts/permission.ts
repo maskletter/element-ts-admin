@@ -75,7 +75,10 @@ export default class PermissionComponent extends Vue {
                 }
             }),
             mergeMap(v => HttpPermission.getPermissionList()),
-            tap(v => {{this.editId = 0, this.showDialog=false;this.isAddChild=false}}),
+            tap(v => {
+                this.editId = 0, this.showDialog=false;this.isAddChild=false
+                this.data = v;
+            }),
             mergeMap(v => this.$hideLoading()),
             tap(v => this.$message({type:'success',message:'编辑成功'}).subscribe())
         ).subscribe()

@@ -2,9 +2,10 @@ import Vue from 'vue'
 import Component from 'vue-class-component';
 import { TableColumn } from '@/component/ts/table';
 import HttpPermission, { Permission } from '@/http/permission';
-import { Ref } from 'vue-property-decorator';
+import { Ref, Watch } from 'vue-property-decorator';
 import { ElForm } from 'element-ui/types/form';
-import { mergeMap, tap } from 'rxjs/operators';
+import { mergeMap, tap, catchError } from 'rxjs/operators';
+import { forkJoin, of, throwError } from 'rxjs';
 @Component
 export default class UserComponent extends Vue {
 
@@ -25,30 +26,61 @@ export default class UserComponent extends Vue {
         password:[  { required: true } ],
         groupId:[  { required: true } ],
     }
+    private editId: number = 0;
+    @Watch('showDialog')
+    private showDialogChange(val: boolean){
+        this.form = { username: '', password: '', groupId: -1 }
+        this.editId = 0;
+        this.$form && this.$form.clearValidate()
+    }
 
     private add(){
         this.showDialog = true;
     }
 
+    private remove(id: number): void {
+        this.$confirm('确定删除吗').pipe(
+            mergeMap(v => HttpPermission.deleteUser(id)),
+            mergeMap(v => HttpPermission.getUserList()),
+            tap(v => this.data = v),
+            mergeMap(v => this.$message({type:'success',message:'删除成功'}))
+        ).subscribe()
+    }
+    
+    private edit(id: number, data: any): void {
+        this.showDialog = true;
+        this.$nextTick(() => {
+            this.editId = id;
+            this.form.username = data.username
+            this.form.password = data.password
+            this.form.groupId = data.groupId
+        })
+    }
+
     private created(){
 
-        HttpPermission.getUserList().subscribe(res => {
-            this.data = res;
-        })
-        HttpPermission.getGroupList().subscribe(res => {
-            this.selectData = res;
-        })
+        forkJoin(HttpPermission.getUserList(),  HttpPermission.getGroupList()).pipe(
+            tap(v => {
+                this.data = v[0]
+                this.selectData = v[1]
+            })
+        ).subscribe()
 
     }
 
     private submit(): void {
         this.$form.validate(valid => {
             if(!valid) return
-            HttpPermission.addUser(this.form).pipe(
+            this.$loading({}).pipe(
+                mergeMap(v => this.editId ? HttpPermission.saveUser({...this.form, id: this.editId}) : HttpPermission.addUser(this.form)),
                 mergeMap(v => HttpPermission.getUserList()),
                 tap(v => this.data = v),
+                mergeMap(v => this.$hideLoading()),
+                mergeMap(v => this.$message({type:'success',message:`${this.editId?"编辑":"添加"}成功`})),
                 tap(v => this.showDialog = false),
-                mergeMap(v => this.$message({type:'success',message:'添加成功'}))
+                catchError(e => {
+                    return this.$message({type:'error', message: e}).pipe(mergeMap(v => this.$hideLoading()));
+                })
             ).subscribe()
         })
     }

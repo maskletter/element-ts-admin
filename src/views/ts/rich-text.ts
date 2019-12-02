@@ -2,9 +2,9 @@ import Component from "vue-class-component";
 import Vue from 'vue'
 import { Ref } from 'vue-property-decorator';
 import CkeditorComponent from '@/component/ts/ckeditor';
-import { flatMap, mergeMap, delay, tap, skipUntil, takeWhile, catchError } from 'rxjs/operators';
+import { flatMap, mergeMap, delay, tap, skipUntil, takeWhile, catchError, map } from 'rxjs/operators';
 import request from '@/http';
-import { of, Observable } from 'rxjs';
+import { of, Observable, forkJoin } from 'rxjs';
 import MdComponent from '@/component/ts/md';
 
 @Component
@@ -15,17 +15,12 @@ export default class RichTextComponent extends Vue {
     private ckeditorContent: string = '';
 
     private mounted(): void {
-        of(this.$loading({}),request.getCkeditorContent(), request.getMdContent()).pipe(
-            mergeMap(v => v),
-            mergeMap((v: any) => {
-                if(!v) return of();
-                if(v.type == 'ckeditor'){
-                    this.ckeditorContent = v.data;
-                    return of()
-                }else if(v.type == 'md') return this.$md.setData(v.data)
-            }),
-            mergeMap(v => this.$hideLoading())
-        ).subscribe()
+       forkJoin(this.$loading({}),request.getCkeditorContent(), request.getMdContent()).pipe(
+           mergeMap(v => this.$hideLoading().pipe(map(_v => v )))
+       ).subscribe(v => {
+            this.ckeditorContent = v[1].data;
+            this.$md.setData(v[2].data)
+       })
     }
 
     private getCkeditorValue(){

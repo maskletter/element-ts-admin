@@ -32,6 +32,13 @@ export default class GroupComponent extends Vue {
         ],
         permission: [ { required: true } ]
     }
+    @Watch('showDialog')
+    private showDialogChange(val: boolean){
+        this.form = { name: '', permission: '' }
+        this.editId = 0;
+        this.$form && this.$form.clearValidate()
+    }
+
 
     private created(){
 
@@ -51,6 +58,17 @@ export default class GroupComponent extends Vue {
         this.showDialog = true;
     }
 
+    
+    private edit(id: number, data: any): void {
+        this.showDialog = true;
+        this.$nextTick(() => {
+            this.editId = id;
+            this.form.name = data.name
+            this.form.permission = data.permission
+            this.$tree.setCheckedKeys(data.permission.split('-'))
+        })
+    }
+
     private remove(id: number): void {
         this.$confirm('确定删除吗').pipe(
             mergeMap(v => HttpPermission.deleteGroup(id)),
@@ -63,11 +81,13 @@ export default class GroupComponent extends Vue {
     private submit(): void {
         this.$form.validate(valid => {
             if(!valid) return;
-            HttpPermission.addGroup(this.form).pipe(
+            this.$loading({}).pipe(
+                mergeMap(v => this.editId ? HttpPermission.saveGroup({...this.form, id: this.editId}): HttpPermission.addGroup(this.form)),
                 mergeMap(v => HttpPermission.getGroupList()),
                 tap(v => this.data = v),
+                mergeMap(v => this.$hideLoading()),
+                mergeMap(v => this.$message({type:'success',message:`${this.editId?"编辑":"添加"}成功`})),
                 tap(v => this.showDialog=false),
-                mergeMap(v => this.$message({type:'success',message:'添加成功'}))
             ).subscribe()
         })
     }

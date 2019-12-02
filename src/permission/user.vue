@@ -6,12 +6,12 @@
         <el-card>
            <ml-table :data='data' :column='column' border >
                <template slot="operating" slot-scope="row">
-                   <el-button type='primary' size='mini'>编辑</el-button>
-                   <el-button size='mini'>删除</el-button>
+                   <el-button type='primary' size='mini' @click="edit(row.scope.id, row.scope)">编辑</el-button>
+                   <el-button size='mini' @click="remove(row.scope.id)">删除</el-button>
                </template>
            </ml-table>
         </el-card>
-        <el-dialog title="添加用户" :visible.sync="showDialog">
+        <el-dialog :title="editId?'编辑用户':'添加用户'" :visible.sync="showDialog">
             <el-form label-width="100px" :rules="rules" :model="form" ref="$form">
               <el-form-item label="用户名" prop="username">
                   <el-input placeholder="" v-model="form.username"></el-input>
