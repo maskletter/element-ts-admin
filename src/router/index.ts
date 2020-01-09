@@ -2,6 +2,7 @@ import vue from 'vue'
 import vue2 from 'vue/dist/vue.esm.js'
 import Router, { RouterOptions, RouteConfig, Route } from 'vue-router'
 import LayuiComponent from '@/layui.vue'
+import TestDialogComponetn from '@/views/test-dialog.vue'
 import store from '../store'
 declare const location: any;
 const originalPush = Router.prototype.push;
@@ -116,7 +117,7 @@ export default class RouterClass {
         },
         {
             path: '/update-log',
-            meta:{ title: '更新日志 ', icon: 'el-icon-postcard' },
+            meta:{ title: '更新日志 ', icon: 'el-icon-postcard', dialog: true },
             component: () => import('@/views/update-log/index.vue')
         }
     ]

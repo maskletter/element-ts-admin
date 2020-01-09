@@ -43,6 +43,14 @@ const Logs: { time: string, title?: string, data?: string[] }[] = [
             "控制打包体积在500kb内",
             "cdn使用库:cropperjs,simplemde,echarts,highlight,axios"
         ]
+    },
+    {
+        time: '2020-01-09',
+        title: '更新左侧导航',
+        data: [
+            "使左侧菜单可以被弹窗方式打开",
+            "router的meta中配置dialog:true",
+        ]
     }
 
 ]
