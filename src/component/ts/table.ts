@@ -14,40 +14,51 @@ export interface _TableColumn{
 }
 export type TableColumn = _TableColumn[];
 
-interface InputFilter{
-    type: 'input'
-    placeholder: string
-    label: string
-    name: string
+function pageToExcel(label: any[],jsonData: any[]){  
+  let str = `<tr> ${label.map(v => {
+      return `<td>${v.title}</td>`
+  }).join('')}</tr>`;
+  
+  str += jsonData.map(v => {
+      return '<tr>'+label.map(({prop}) => {
+        return `<td>${v[prop]}</td>`
+      }).join('')+'</tr>'
+  })
+  //Worksheet名
+  let worksheet = 'Sheet1';  
+  // let uri = 'data:application/vnd.ms-excel;base64,';
+  let uri = 'data:application/vnd.ms-excel;base64,';
+
+  //下载的表格模板数据
+  let template = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns="http://www.w3.org/TR/REC-html40">
+  <head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>
+    <x:Name>${worksheet}</x:Name>
+    <x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet>
+    </x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+    </head><body><table>${str}</table></body></html>`;
+  //下载模板
+  var a = document.createElement("a");  //为了给xls文件命名，重新创建一个a元素
+  a.href = uri + base64(template);  // 给a元素设置 href属性
+  a.download ='dawdawd.xls';   // 给a元素设置下载名称
+  a.click();  // 点击a标签 下载文件
 }
-interface SelectFilter{
-    type: 'select'
-    placeholder: string
-    label: string
-    name: string
-    data: {
-        value: string|number
-        label: string
-    }[]
-}
-export type TableFilter = Array<InputFilter|SelectFilter>
+function base64 (template: string) { return window.btoa(unescape(encodeURIComponent(template))) }
+
+//输出base64编码
+// function base64 (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+
 
 @Component
 export default class TableComponent extends Vue{
 
     @Prop({type: Array}) private readonly column!: string[];
     @Prop({type: Array}) private readonly data!: string[];
-    @Prop({type: Number,default: 10}) private readonly length!: number
-    @Prop({type: String}) private readonly url!: string
-    @Prop({type: String, default: 'GET'}) private readonly method!: AxiosRequestConfig['method']
-    @Prop({type: Array}) private filter!: TableFilter
-    @Prop() private readonly selection!: boolean
+    @Prop({type: Boolean}) private readonly download!: boolean;
     private http!: Subscription
     private total: number = 0;
-    private condition: any = {
-        length: this.length,
-        page: 1
-    }
+    
     private tabledatas: any[] = [];
 
     @Watch('data')
@@ -60,41 +71,16 @@ export default class TableComponent extends Vue{
         else return false;
     }
 
-    private getComponentName(name: string){
-        switch (name) {
-            case 'input':
-                return 'el-input'
-            case 'select':
-                return 'el-select'
-            default :
-                return 'el-input'
-        }
+    private downLoad(): void {
+        pageToExcel(this.column, this.data)
     }
+
 
     private created(){
         if(this.data) this.tabledatas = this.data
-        if(!this.url) return;
-        this.getData()
-    }
-    
-    private getData(){
-        this.http && this.http.unsubscribe()
-        this.http = request({ method: this.method, url: this.url, params: this.condition }).subscribe((res: any) => {
-            this.tabledatas = res.data
-            this.total = res.total
-        })
     }
 
-    private currentChange(page: number){
-        this.condition.page = page;
-        this.getData()
-    }
 
-    private clearSearchFilter(){
-        this.filter.forEach(v => {
-            this.condition[v.name] = '';
-        })
-        this.getData()
-    }
+
 
 }

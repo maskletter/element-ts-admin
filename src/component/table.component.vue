@@ -1,31 +1,6 @@
 <template>
-    <div>
-        <div class="filter-table" v-if='filter && filter.length'>
-            <el-row>
-                <el-col :span='4'><div style="line-height: 40px;">条件筛选</div></el-col>
-                <el-col :span='20'>
-                    <template v-for='(item, index) in filter' >
-                        <span v-if="item.label">{{item.label}}: </span>
-                        <component 
-                            :style="{width: '150px'}" 
-                            :is='getComponentName(item.type)'
-                            :placeholder='item.placeholder'
-                            v-model="condition[item.name]">
-                            <template v-if="item.type =='select'">
-                                <el-option v-for="(_item, _index) in item.data" :key="_index" :value='_item.value' :label='_item.label'></el-option>    
-                            </template>
-                        </component>
-                        <span style="display:inline-block;width:10px;"></span>
-                    </template>
-                    
-                    <!-- <el-input :style="{width: '200px'}" /> -->
-                </el-col>
-            </el-row><br>
-            <div style="text-align:right">
-                <el-button size='mini' type='primary' @click="getData">搜索</el-button>
-                <el-button size='mini' @click="clearSearchFilter">情况搜索条件</el-button>
-            </div>
-        </div>
+    <div class="table-container">
+        <div class="download" @click="downLoad" v-if="download"><i class="el-icon-download"></i>下载</div>
         <!-- {{$attrs}} -->
         <el-table :data="tabledatas" style="width:100%" v-bind='$attrs' v-on="$listeners">
             <el-table-column align="center" v-if='selection' type="selection" width="55"></el-table-column>
@@ -52,3 +27,23 @@
     </div>
 </template>
 <script lang="ts" src='./ts/table.ts'></script>
+<style lang="scss" scoped>
+.table-container{
+    position: relative;
+    .download{
+        cursor: pointer;
+        position: absolute;
+        right: 0px;
+        z-index: 99;
+        font-size: 12px;
+        color: #666;
+        i{
+            margin-right: 5px;
+            font-size: 15px;
+        }
+        &:hover{
+            color: #409EFF
+        }
+    }
+}
+</style>

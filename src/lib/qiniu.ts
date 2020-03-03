@@ -21,12 +21,33 @@ export default class QiNiu {
         }))
     }
 
+    private static _file(key: string, token: string, file:File): Observable<any> {
+        return from(Axios.post('https://up-z1.qiniup.com', {
+            token, key, file
+        }))
+    }
+
     //通过base64上传到七牛云
     public static upLoadBase64(base64: string): Observable<any> {
         return of(Math.random()+new Date().getTime()+'').pipe(
             mergeMap(v => QiNiu.getQiNiuToken(v).pipe(tap(_v => _v.data.key = v))),
             map(v => v.data),
             mergeMap(v => QiNiu.__base64(base64, v.key, v.token).pipe(
+                tap(v => {
+                    if(v.data.error){
+                        throw v.data;
+                    }
+                })
+            ))
+        )
+    }
+    
+    //通过file上传到七牛云
+    public static upLoadFile(_file: File): Observable<any> {
+        return of(Math.random()+new Date().getTime()+'').pipe(
+            mergeMap(v => QiNiu.getQiNiuToken(v).pipe(tap(_v => _v.data.key = v))),
+            map(v => v.data),
+            mergeMap(v => QiNiu._file(v.key, v.token, _file).pipe(
                 tap(v => {
                     if(v.data.error){
                         throw v.data;

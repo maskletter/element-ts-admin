@@ -6,20 +6,20 @@
                 <el-button style="float: right; padding: 3px 0" type="text">查看json树</el-button>&nbsp;&nbsp;
                 <el-button style="float: right; padding: 3px 0" type="text">查看json树</el-button>
             </div>
-            <MlForm :data='createFormData' />
+            <MlForm :data='createFormData' label-width='100px' />
         </el-card><br>
         <el-card>
             <div slot="header" class="clearfix">
                 <span>通过json渲染</span>
             </div>
             <el-row>
-                <el-col :span='12'>
+                <el-col :span='11'>
                     <jsoneditor :json='form' ref='jsoneditor'></jsoneditor><br>
                     <div style="text-align:center">
                         <el-button type='primary' @click="renderForm">渲染表单</el-button>
                     </div>
                 </el-col>
-                <el-col :span='12'>
+                <el-col :span='12' :offset="1">
                     <MlForm :data='renderFormData' />
                 </el-col>
             </el-row>

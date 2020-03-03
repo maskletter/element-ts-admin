@@ -53,6 +53,11 @@ export default class RouterClass {
             component: () => import('@/views/tool.vue')
         },
         {
+            path: 'dragula',
+            meta:{ title: '拖拽', icon: 'el-icon-tickets' },
+            component: () => import('@/views/dragula.vue')
+        },
+        {
             path: 'test',
             meta:{ title: '测试路由', icon: 'el-icon-attract' },
             component: (h) => h(vue2.compile(`

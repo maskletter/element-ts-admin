@@ -5,17 +5,17 @@
             <div slot="header" class="clearfix">
                 <span>默认使用</span>
             </div>
-            <MlTable :column='column' :data='tableData'></MlTable>
+            <MlTable download :column='column' :data='tableData'></MlTable>
         </el-card><br>
         <el-card>
             <div slot="header" class="clearfix">
                 <span>使用slot</span>
             </div>    
             <MlTable :column='column2' :data='tableData'>
-                <template slot-scope="{scope}" slot='name'>
-                    ??{{scope.name}}
+                <template v-slot:name='{scope}'>
+                    ???{{scope.name}}
                 </template>
-                <template slot-scope="row" slot='other'>
+                <template v-slot:other>
                     <el-button>添加</el-button>
                 </template>
             </MlTable>
@@ -35,12 +35,7 @@
             
             <MlTable :column='dynamicTable' :data='tableData'></MlTable>
         </el-card><br>
-        <el-card>
-            <div slot="header" class="clearfix">
-                <span>直接使用内置接口请求，最简洁模式，内置分页功能 ，只需添加url属性配置,自动请求接口</span>
-            </div>    
-            <MlTable :column='dynamicTable' url='/tableData' :length='6' :filter='tableFilters'></MlTable>
-        </el-card>
+     
         
         
     </div>
