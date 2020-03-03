@@ -14,14 +14,20 @@ export default class dragulaPage extends Vue {
         removeOnSpill: true
     }
     private msg: string = '';
-    private school = ['北京大学','香港大学','深圳大学','厦门大学'];
+    private msg2: string = '';
+    private school: string[] = ['北京大学','香港大学','深圳大学','厦门大学'];
+    private school2: string[] = ['北京大学','香港大学','深圳大学','厦门大学'];
 
     private removeEvent({el,container,source}:{el: Element, container: Element, source: Element}): void {
-        console.log(el,container, source)
+        this.msg2 = `位于${(container.previousElementSibling as any).innerHTML}的${el.innerHTML}被删除了`
     }
 
     private dragEvent({el, target, source, sibling}:{el:Element, target:Element, source:Element, sibling:Element}): void {
         this.msg = `${el.innerHTML}移到了${((el.parentElement as Element).previousElementSibling as any).innerHTML}`
+    }
+
+    private drag2Event({el, target, source, sibling}:{el:Element, target:Element, source:Element, sibling:Element}): void {
+        this.school2 = Array.from(target.children).map(v => this.school[v.getAttribute('data-index') as any])
     }
 
 }

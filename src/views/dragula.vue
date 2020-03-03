@@ -1,36 +1,38 @@
 <template>
     <div class="page-container">
         <el-card>
-            <h1>尝试拖动下面元素</h1><br>
+            <h1>尝试拖动下面元素，可拖动删除</h1><br>
             <div>{{msg}}</div><br>
-                <Dragula @drop='dragEvent' @remove='removeEvent' :config='dragulaConfig'>
-                    <el-row>
-                        <el-col :span="7">
-                            <h4>左列</h4>
-                            <ul class="test-ul" dragula-0>
-                                <li class="dragula-li" label='左列' v-for='item in school' :key="item">第一个:{{item}}</li>
-                            </ul>
-                        </el-col>
-                        <el-col :span="7" offset="1">
-                            <h4>中列</h4>
-                            <ul class="test-ul" dragula-1>
-                                <li class="dragula-li" label='中列' v-for='item in school' :key="item">第二个:{{item}}</li>
-                            </ul>
-                        </el-col>
-                        <el-col :span="8" offset="1">
-                            <h4>右列</h4>
-                            <ul class="test-ul" dragula-2>
-                                <li class="dragula-li" label='右列' v-for='item in school' :key="item">第三个:{{item}}</li>
-                            </ul>
-                        </el-col>
-                    </el-row>
-                </Dragula>
+            <div>{{msg2}}</div><br>
+            <Dragula @drop='dragEvent' @remove='removeEvent' :config='dragulaConfig'>
+                <el-row>
+                    <el-col :span="7">
+                        <h4>左列</h4>
+                        <ul class="test-ul" dragula-slide>
+                            <li class="dragula-li" label='左列' v-for='item in school' :key="item">第一个:{{item}}</li>
+                        </ul>
+                    </el-col>
+                    <el-col :span="7" offset="1">
+                        <h4>中列</h4>
+                        <ul class="test-ul" dragula-slide>
+                            <li class="dragula-li" label='中列' v-for='item in school' :key="item">第二个:{{item}}</li>
+                        </ul>
+                    </el-col>
+                    <el-col :span="8" offset="1">
+                        <h4>右列</h4>
+                        <ul class="test-ul" dragula-slide>
+                            <li class="dragula-li" label='右列' v-for='item in school' :key="item">第三个:{{item}}</li>
+                        </ul>
+                    </el-col>
+                </el-row>
+            </Dragula>
         </el-card>
         <br><br>
         <el-card>
-            <Dragula>
-                <ul dragula-0>
-                    <li class="dragula-li" v-for='item in school' :key="item">{{item}}</li>
+            <div>顺序:&nbsp;{{school2}}</div><br>
+            <Dragula @drop='drag2Event'>
+                <ul dragula-slide>
+                    <li :data-index='index' class="dragula-li" v-for='(item, index) in school' :key="item">{{item}}</li>
                 </ul>
             </Dragula>
         </el-card>

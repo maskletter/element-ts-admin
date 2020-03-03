@@ -41,7 +41,7 @@ function pageToExcel(label: any[],jsonData: any[]){
   //下载模板
   var a = document.createElement("a");  //为了给xls文件命名，重新创建一个a元素
   a.href = uri + base64(template);  // 给a元素设置 href属性
-  a.download ='dawdawd.xls';   // 给a元素设置下载名称
+  a.download = new Date().getTime()+'.xls';   // 给a元素设置下载名称
   a.click();  // 点击a标签 下载文件
 }
 function base64 (template: string) { return window.btoa(unescape(encodeURIComponent(template))) }

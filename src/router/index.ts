@@ -48,9 +48,9 @@ export default class RouterClass {
             component: () => import('@/views/rich-text.vue')
         },
         {
-            path: 'tool',
-            meta:{ title: '小工具', icon: 'el-icon-tickets' },
-            component: () => import('@/views/tool.vue')
+            path: 'crop',
+            meta:{ title: '图片裁剪', icon: 'el-icon-tickets' },
+            component: () => import('@/views/crop.vue')
         },
         {
             path: 'dragula',

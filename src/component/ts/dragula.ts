@@ -33,13 +33,7 @@ export default class dragulaPage extends Vue {
     public $drake!: dragula.Drake
 
     mounted(){
-        let elements: Element[] = [];
-        for(let i = 0; i < 100; i++){
-            const element = this.$el.querySelector(`[dragula-${i}]`)
-            if(element) elements.push(element)
-            else break
-        }
-        console.log(elements)
+        let elements: Element[] = Array.from(this.$el.querySelectorAll('[dragula-slide]'));
         this.$drake = dragula(elements, this.config);
         this.$drake.on('drag', (el, source ) => this.$emit('drag',{el, source }))
         this.$drake.on('dragend', (el) => this.$emit('dragend',{el}))
@@ -50,15 +44,6 @@ export default class dragulaPage extends Vue {
         this.$drake.on('over', (el, container, source) => this.$emit('over',{el, container, source}))
         this.$drake.on('out', (el, container, source) => this.$emit('out',{el, container, source}))
         this.$drake.on('cloned', (clone, original, type) => this.$emit('cloned',{clone, original, type}))
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
     }
 
 }
